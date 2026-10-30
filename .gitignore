@@ -1,0 +1,25 @@
+# Dipendenze
+node_modules/
+
+# Cartella temporanea di Wrangler
+.wrangler/
+
+# File di sistema (Mac / Windows)
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# File di log
+*.log
+npm-debug.log*
+
+# File di ambiente (segreti)
+.env
+.env.local
+.env.*.local
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo

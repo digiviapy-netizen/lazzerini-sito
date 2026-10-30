@@ -1,0 +1,44 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "impostazioni"
+    label: "Impostazioni Sito"
+    files:
+      - name: "generali"
+        label: "Impostazioni Generali"
+        file: "content.json"
+        fields:
+          - label: "Logo"
+            name: "logo"
+            widget: "image"
+            required: false
+            hint: "Carica qui il logo del ristorante."
+
+          - label: "Foto Galleria"
+            name: "galleryImages"
+            widget: "list"
+            required: false
+            field: { label: "Foto", name: "foto", widget: "image" }
+
+          - label: "Footer"
+            name: "footer"
+            widget: "object"
+            fields:
+              - { label: "Nome creatore", name: "creatorName", widget: "string", default: "digiviapy.com" }
+              - { label: "URL creatore", name: "creatorUrl", widget: "string", default: "https://digiviapy.com" }
+              - { label: "Anno copyright", name: "year", widget: "string", default: "auto", hint: "Scrivi 'auto' per l'anno corrente" }
+              - { label: "Titolare copyright", name: "copyrightHolder", widget: "string", default: "Lazzerini Pizza e Pasta" }
+
+          - label: "Traduzioni"
+            name: "translations"
+            widget: "object"
+            fields:
+              - { label: "Italiano", name: "it", widget: "object", fields: [{ label: "Tagline", name: "tagline", widget: "string" }] }
+              - { label: "Español", name: "es", widget: "object", fields: [{ label: "Tagline", name: "tagline", widget: "string" }] }
+              - { label: "English", name: "en", widget: "object", fields: [{ label: "Tagline", name: "tagline", widget: "string" }] }
+              - { label: "Português", name: "pt", widget: "object", fields: [{ label: "Tagline", name: "tagline", widget: "string" }] }

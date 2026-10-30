@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lazzerini · Pizza e Pasta</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: #f8f5f0; color: #2c2c2c; line-height: 1.6; }
+
+        .top-banner {
+            position: sticky; top: 0; z-index: 1000;
+            background: #1a1a1a; color: #fff; font-size: 0.85rem;
+            padding: 0.6rem 1rem; display: flex; justify-content: center;
+            align-items: center; gap: 1.2rem; flex-wrap: wrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .top-banner a, .top-banner .locality { color: #ccc; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 0.3rem; }
+        .top-banner a:hover { color: #d4af37; }
+        .top-banner .order-btn {
+            background: #d4af37; color: #1a1a1a; padding: 0.4rem 1rem;
+            border-radius: 20px; font-weight: 700; font-size: 0.85rem;
+            border: none; cursor: pointer; display: inline-flex;
+            align-items: center; gap: 0.4rem; transition: background 0.2s;
+        }
+        .top-banner .order-btn:hover { background: #fff; }
+
+        header { background: #fff; text-align: center; padding: 1.5rem 1rem 1rem; border-bottom: 3px solid #d4af37; position: relative; }
+        .logo-container { width: 120px; height: 120px; margin: 0 auto 0.8rem; border-radius: 50%; overflow: hidden; background: #f0f0f0; display: flex; align-items: center; justify-content: center; border: 3px solid #d4af37; }
+        .logo-container img { width: 100%; height: 100%; object-fit: cover; }
+        .logo-container .logo-placeholder { font-size: 0.7rem; color: #999; text-align: center; padding: 0.5rem; }
+        header h1 { font-size: 2rem; letter-spacing: 2px; font-weight: 300; text-transform: uppercase; color: #1a1a1a; }
+        header .tagline { font-size: 1rem; color: #d4af37; margin-top: 0.3rem; font-style: italic; }
+
+        .lang-selector { position: absolute; top: 1rem; right: 1rem; display: flex; gap: 0.4rem; }
+        .lang-selector button { background: transparent; border: 1px solid #ccc; color: #555; padding: 0.25rem 0.6rem; border-radius: 20px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
+        .lang-selector button:hover { border-color: #d4af37; color: #d4af37; }
+        .lang-selector button.active { background: #d4af37; border-color: #d4af37; color: #1a1a1a; font-weight: 600; }
+
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 2000; align-items: center; justify-content: center; padding: 1rem; }
+        .modal-overlay.active { display: flex; }
+        .modal-box { background: #fff; border-radius: 16px; padding: 2rem 2rem 1.5rem; max-width: 420px; width: 100%; text-align: center; border-top: 6px solid #d4af37; box-shadow: 0 20px 50px rgba(0,0,0,0.4); animation: popIn 0.25s ease-out; }
+        @keyframes popIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-box .icon { font-size: 3rem; margin-bottom: 0.5rem; }
+        .modal-box h3 { font-size: 1.4rem; color: #1a1a1a; margin-bottom: 0.6rem; }
+        .modal-box p { color: #555; font-size: 0.95rem; margin-bottom: 1.4rem; }
+        .modal-box .modal-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center; }
+        .modal-box .modal-actions a, .modal-box .modal-actions button { padding: 0.65rem 1.2rem; border-radius: 30px; font-weight: 600; font-size: 0.9rem; text-decoration: none; cursor: pointer; border: none; transition: all 0.2s; }
+        .modal-box .btn-call { background: #d4af37; color: #1a1a1a; }
+        .modal-box .btn-call:hover { background: #1a1a1a; color: #d4af37; }
+        .modal-box .btn-close { background: #eee; color: #333; }
+        .modal-box .btn-close:hover { background: #ddd; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem; }
+        .intro { text-align: center; margin-bottom: 2.5rem; }
+        .intro h2 { font-size: 1.8rem; margin-bottom: 0.8rem; color: #1a1a1a; }
+        .intro p { max-width: 700px; margin: 0 auto; color: #555; }
+
+        .sedi { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; margin-bottom: 3rem; }
+        .sede-card { background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); padding: 2rem; flex: 1 1 350px; max-width: 500px; border-top: 5px solid #d4af37; transition: transform 0.2s; }
+        .sede-card:hover { transform: translateY(-5px); }
+        .sede-card h3 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #1a1a1a; }
+        .sede-card .badge { display: inline-block; background: #1a1a1a; color: #fff; font-size: 0.75rem; padding: 0.2rem 0.7rem; border-radius: 20px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1rem; }
+        .sede-card p { margin-bottom: 0.6rem; color: #444; font-size: 0.95rem; }
+        .sede-card strong { color: #1a1a1a; }
+        .sede-card a { color: #d4af37; text-decoration: none; font-weight: 600; }
+        .sede-card a:hover { text-decoration: underline; }
+        .orari { margin-top: 1rem; border-top: 1px dashed #ddd; padding-top: 1rem; }
+        .orari h4 { font-size: 1rem; margin-bottom: 0.5rem; color: #1a1a1a; }
+        .orari ul { list-style: none; font-size: 0.9rem; }
+        .orari ul li { display: flex; justify-content: space-between; padding: 0.2rem 0; border-bottom: 1px solid #f0f0f0; }
+        .orari ul li:last-child { border-bottom: none; }
+
+        .location-info { background: #faf7f0; border-radius: 12px; padding: 1.5rem; margin-top: 1.2rem; border-left: 4px solid #d4af37; }
+        .location-info h4 { font-size: 1rem; margin-bottom: 0.6rem; color: #1a1a1a; }
+        .location-info ul { list-style: none; font-size: 0.9rem; }
+        .location-info ul li { padding: 0.3rem 0; border-bottom: 1px solid #eee; }
+        .location-info ul li:last-child { border-bottom: none; }
+        .location-info ul li a { color: #d4af37; text-decoration: none; }
+
+        .gallery-section { margin-top: 3rem; }
+        .gallery-section h2 { text-align: center; font-size: 1.8rem; margin-bottom: 1.5rem; color: #1a1a1a; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
+        .gallery-item { border-radius: 10px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.1); background: #eee; aspect-ratio: 4/3; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+        .gallery-item img:hover { transform: scale(1.05); }
+
+        .call-banner { position: sticky; bottom: 0; background: #1a1a1a; color: #fff; text-align: center; padding: 1rem; z-index: 900; display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap; border-top: 3px solid #d4af37; }
+        .call-banner span { font-size: 0.95rem; }
+        .call-banner a { display: inline-block; background: #d4af37; color: #1a1a1a; padding: 0.7rem 2rem; border-radius: 30px; text-decoration: none; font-weight: 700; font-size: 1rem; transition: background 0.3s; }
+        .call-banner a:hover { background: #fff; }
+
+        .social { text-align: center; margin-top: 3rem; padding: 1.5rem; background: #1a1a1a; border-radius: 12px; }
+        .social p { color: #fff; margin-bottom: 1rem; font-size: 1.1rem; }
+        .social a { display: inline-block; margin: 0 0.5rem; color: #d4af37; font-weight: 600; text-decoration: none; border: 1px solid #d4af37; padding: 0.5rem 1.2rem; border-radius: 30px; transition: all 0.3s; }
+        .social a:hover { background: #d4af37; color: #1a1a1a; }
+
+        footer { text-align: center; padding: 1.5rem; font-size: 0.8rem; color: #888; margin-top: 2rem; padding-bottom: 5rem; }
+        footer p { margin: 0.2rem 0; }
+        footer .footer-credit a { color: #d4af37; text-decoration: none; font-weight: 600; }
+        footer .footer-credit a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.6rem; }
+            .sede-card { padding: 1.5rem; }
+            .lang-selector { position: static; justify-content: center; margin-bottom: 1rem; flex-wrap: wrap; }
+            .top-banner { font-size: 0.75rem; gap: 0.6rem; padding: 0.5rem; }
+            .top-banner .order-btn { font-size: 0.75rem; padding: 0.35rem 0.8rem; }
+            .call-banner { font-size: 0.85rem; padding: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-banner">
+        <span class="locality" data-i18n="bannerLocality">📍 Fernando de la Mora & Asunción</span>
+        <a href="tel:+595983328698">📞 +595 983 328698</a>
+        <a href="https://wa.me/595983328698" target="_blank">💬 WhatsApp</a>
+        <button class="order-btn" id="orderBtn">🛒 <span data-i18n="orderBannerText">Ordina online</span></button>
+    </div>
+
+    <header>
+        <div class="lang-selector" id="langSelector">
+            <button data-lang="it">🇮🇹 IT</button>
+            <button data-lang="es">🇪🇸 ES</button>
+            <button data-lang="en">🇬🇧 EN</button>
+            <button data-lang="pt">🇧🇷 PT</button>
+        </div>
+        <div class="logo-container" id="logoContainer">
+            <div class="logo-placeholder" data-i18n="logoPlaceholder">Inserisci link logo</div>
+        </div>
+        <h1>Lazzerini</h1>
+        <p class="tagline" data-i18n="tagline"></p>
+    </header>
+
+    <div class="container">
+        <div class="intro">
+            <h2 data-i18n="introTitle"></h2>
+            <p data-i18n="introText"></p>
+        </div>
+
+        <div class="sedi">
+            <div class="sede-card">
+                <span class="badge" data-i18n="badge1"></span>
+                <h3>Fernando de la Mora</h3>
+                <p><strong data-i18n="address"></strong> Cnel. Cazal, Fernando de la Mora 110312, Paraguay</p>
+                <p><strong data-i18n="phone"></strong> <a href="tel:+595983328698">+595 983 328698</a></p>
+                <p><strong data-i18n="rating"></strong> ⭐ 4.6/5 (770+ <span data-i18n="reviews"></span>)</p>
+                <p><a href="https://www.google.com/maps/search/Lazzerini+Pizzas+y+Pastas+Fernando+de+la+Mora" target="_blank" data-i18n="openMaps"></a></p>
+                <div class="orari">
+                    <h4 data-i18n="hoursTitle"></h4>
+                    <ul>
+                        <li><span data-i18n="mon"></span> <span>19:30 – 22:30</span></li>
+                        <li><span data-i18n="tue"></span> <span>19:30 – 22:30</span></li>
+                        <li><span data-i18n="wed"></span> <span>19:30 – 22:30</span></li>
+                        <li><span data-i18n="thu"></span> <span>19:30 – 22:30</span></li>
+                        <li><span data-i18n="fri"></span> <span>19:30 – 23:00</span></li>
+                        <li><span data-i18n="sat"></span> <span>19:30 – 23:00</span></li>
+                        <li><span data-i18n="sun"></span> <span>12:00 – 14:30 / 19:30 – 22:30</span></li>
+                    </ul>
+                </div>
+                <div class="location-info">
+                    <h4 data-i18n="nearbyTitle"></h4>
+                    <p style="font-size:0.9rem; color:#666; margin-bottom:0.5rem;" data-i18n="nearbyText"></p>
+                    <ul>
+                        <li>🏨 <a href="https://www.google.com/maps/search/Abbey+Road+Inn+Fernando+de+la+Mora" target="_blank">Abbey Road Inn</a> – <span data-i18n="hotelNearby1"></span></li>
+                        <li>🏨 <a href="https://www.google.com/maps/search/Five+Hotel+Residences+Asuncion" target="_blank">Five Hotel & Residences</a> – <span data-i18n="hotelNearby2"></span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sede-card">
+                <span class="badge" data-i18n="badge2"></span>
+                <h3>Asunción · Villa Morra</h3>
+                <p><strong data-i18n="address"></strong> Guido Spano esq. Bulnes, Villa Morra, Asunción, Paraguay</p>
+                <p><strong data-i18n="phone"></strong> <a href="tel:+595983328698">+595 983 328698</a></p>
+                <p><strong data-i18n="rating"></strong> ⭐ 4.7/5 (150+ <span data-i18n="reviews"></span>)</p>
+                <p><a href="https://www.google.com/maps/search/Lazzerini+Pasta+%26+Pizza+Asunci%C3%B3n" target="_blank" data-i18n="openMaps"></a></p>
+                <div class="orari">
+                    <h4 data-i18n="hoursTitle"></h4>
+                    <ul>
+                        <li><span data-i18n="mon"></span> <span>19:30 – 22:30</span></li>
+                        <li><span data-i18n="tue"></span> <span>19:30 – 22:30</span></li>
+                        <li><span data-i18n="wed"></span> <span>19:30 – 22:30</span></li>
+                        <li><span data-i18n="thu"></span> <span>19:30 – 22:30</span></li>
+                        <li><span data-i18n="fri"></span> <span>19:30 – 22:30</span></li>
+                        <li><span data-i18n="sat"></span> <span>19:30 – 22:30</span></li>
+                        <li><span data-i18n="sun"></span> <span>12:00 – 14:30</span></li>
+                    </ul>
+                </div>
+                <div class="location-info">
+                    <h4 data-i18n="nearbyTitle"></h4>
+                    <p style="font-size:0.9rem; color:#666; margin-bottom:0.5rem;" data-i18n="nearbyText"></p>
+                    <ul>
+                        <li>🏨 <a href="https://www.google.com/maps/search/Hotel+Villa+Morra+Suites+Asuncion" target="_blank">Hotel Villa Morra Suites</a> – <span data-i18n="hotelNearby1"></span></li>
+                        <li>🏨 <a href="https://www.google.com/maps/search/Factoria+Hotel+Asuncion" target="_blank">Factoria Hotel</a> – <span data-i18n="hotelNearby2"></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="gallery-section">
+            <h2 data-i18n="galleryTitle"></h2>
+            <div class="gallery-grid" id="galleryGrid"></div>
+        </div>
+
+        <div class="social">
+            <p data-i18n="socialTitle"></p>
+            <a href="https://www.instagram.com/lazzerini.py/" target="_blank">Instagram</a>
+            <a href="https://www.facebook.com/lazzerini.py/" target="_blank">Facebook</a>
+        </div>
+    </div>
+
+    <div class="call-banner">
+        <span data-i18n="callBannerText">📞 Chiama ora per prenotare</span>
+        <a href="tel:+595983328698" data-i18n="callNow">Chiama ora</a>
+    </div>
+
+    <footer>
+        <p><span>©</span> <span id="footerYear"></span> · <span id="footerCopyrightHolder">Lazzerini Pizza e Pasta</span> <span data-i18n="footerRights"></span></p>
+        <p class="footer-credit"><span data-i18n="footerCreatedBy"></span> <a href="https://digiviapy.com" target="_blank" rel="noopener" id="footerCreatorLink">digiviapy.com</a></p>
+    </footer>
+
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal-box">
+            <div class="icon">🛒</div>
+            <h3 data-i18n="modalTitle"></h3>
+            <p data-i18n="modalText"></p>
+            <div class="modal-actions">
+                <a href="tel:+595983328698" class="btn-call" data-i18n="modalCall"></a>
+                <button class="btn-close" id="modalClose" data-i18n="modalClose"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const defaultTranslations = {
+            it: {
+                bannerLocality: "📍 Fernando de la Mora & Asunción",
+                tagline: "Pizza e Pasta · Tradizione Italiana in Paraguay",
+                logoPlaceholder: "Inserisci link logo",
+                orderBannerText: "Ordina online",
+                introTitle: "Due sedi, un'unica passione",
+                introText: "Pizze artigianali, paste fresche e ricette italiane tramandate da generazioni. Scegli la sede più vicina a te.",
+                badge1: "Sede Storica", badge2: "Sede Villa Morra",
+                address: "Indirizzo:", phone: "Telefono:", rating: "Valutazione:", reviews: "recensioni",
+                checkMaps: "verificare su Google Maps", openMaps: "📍 Apri in Google Maps",
+                hoursTitle: "Orari di apertura",
+                nearbyTitle: "Nelle vicinanze", nearbyText: "Hotel e strutture consigliate vicino alla sede:",
+                hotelNearby1: "a pochi minuti", hotelNearby2: "zona Villa Morra",
+                galleryTitle: "Galleria Fotografica", socialTitle: "Seguici sui social per novità e promozioni",
+                callBannerText: "📞 Chiama ora per prenotare", callNow: "Chiama ora",
+                modalTitle: "Ordini online in arrivo", modalText: "Stiamo lavorando per attivare gli ordini online. Nel frattempo, chiamaci direttamente!",
+                modalCall: "📞 Chiama ora", modalClose: "Chiudi",
+                footerRights: "Tutti i diritti riservati.", footerCreatedBy: "Creato da",
+                mon: "Lunedì", tue: "Martedì", wed: "Mercoledì", thu: "Giovedì", fri: "Venerdì", sat: "Sabato", sun: "Domenica"
+            },
+            es: {
+                bannerLocality: "📍 Fernando de la Mora y Asunción",
+                tagline: "Pizza y Pasta · Tradición Italiana en Paraguay",
+                logoPlaceholder: "Insertar enlace del logo",
+                orderBannerText: "Pedir online",
+                introTitle: "Dos locales, una sola pasión",
+                introText: "Pizzas artesanales, pastas frescas y recetas italianas transmitidas por generaciones. Elegí el local más cercano.",
+                badge1: "Local Histórico", badge2: "Local Villa Morra",
+                address: "Dirección:", phone: "Teléfono:", rating: "Valoración:", reviews: "reseñas",
+                checkMaps: "verificar en Google Maps", openMaps: "📍 Abrir en Google Maps",
+                hoursTitle: "Horarios de atención",
+                nearbyTitle: "Cerca de aquí", nearbyText: "Hoteles y alojamientos recomendados cerca del local:",
+                hotelNearby1: "a pocos minutos", hotelNearby2: "zona Villa Morra",
+                galleryTitle: "Galería de Fotos", socialTitle: "Seguinos en redes para novedades y promociones",
+                callBannerText: "📞 Llamá ahora para reservar", callNow: "Llamar ahora",
+                modalTitle: "Pedidos online próximamente", modalText: "Estamos trabajando para habilitar los pedidos online. ¡Mientras tanto, llámanos directamente!",
+                modalCall: "📞 Llamar ahora", modalClose: "Cerrar",
+                footerRights: "Todos los derechos reservados.", footerCreatedBy: "Creado por",
+                mon: "Lunes", tue: "Martes", wed: "Miércoles", thu: "Jueves", fri: "Viernes", sat: "Sábado", sun: "Domingo"
+            },
+            en: {
+                bannerLocality: "📍 Fernando de la Mora & Asunción",
+                tagline: "Pizza & Pasta · Italian Tradition in Paraguay",
+                logoPlaceholder: "Insert logo link",
+                orderBannerText: "Order online",
+                introTitle: "Two locations, one passion",
+                introText: "Handcrafted pizzas, fresh pasta and Italian recipes passed down through generations. Choose the location closest to you.",
+                badge1: "Historic Location", badge2: "Villa Morra Location",
+                address: "Address:", phone: "Phone:", rating: "Rating:", reviews: "reviews",
+                checkMaps: "check on Google Maps", openMaps: "📍 Open in Google Maps",
+                hoursTitle: "Opening hours",
+                nearbyTitle: "Nearby", nearbyText: "Recommended hotels and accommodations near the location:",
+                hotelNearby1: "a few minutes away", hotelNearby2: "Villa Morra area",
+                galleryTitle: "Photo Gallery", socialTitle: "Follow us on social media for news and promotions",
+                callBannerText: "📞 Call now to book", callNow: "Call now",
+                modalTitle: "Online ordering coming soon", modalText: "We're working on enabling online orders. In the meantime, call us directly!",
+                modalCall: "📞 Call now", modalClose: "Close",
+                footerRights: "All rights reserved.", footerCreatedBy: "Created by",
+                mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", sat: "Saturday", sun: "Sunday"
+            },
+            pt: {
+                bannerLocality: "📍 Fernando de la Mora e Asunción",
+                tagline: "Pizza e Massa · Tradição Italiana no Paraguai",
+                logoPlaceholder: "Inserir link do logo",
+                orderBannerText: "Pedir online",
+                introTitle: "Duas unidades, uma só paixão",
+                introText: "Pizzas artesanais, massas frescas e receitas italianas passadas de geração em geração. Escolha a unidade mais próxima de você.",
+                badge1: "Unidade Histórica", badge2: "Unidade Villa Morra",
+                address: "Endereço:", phone: "Telefone:", rating: "Avaliação:", reviews: "avaliações",
+                checkMaps: "verificar no Google Maps", openMaps: "📍 Abrir no Google Maps",
+                hoursTitle: "Horário de funcionamento",
+                nearbyTitle: "Próximo", nearbyText: "Hotéis e acomodações recomendados perto da unidade:",
+                hotelNearby1: "a poucos minutos", hotelNearby2: "região de Villa Morra",
+                galleryTitle: "Galeria de Fotos", socialTitle: "Siga-nos nas redes sociais para novidades e promoções",
+                callBannerText: "📞 Ligue agora para reservar", callNow: "Ligar agora",
+                modalTitle: "Pedidos online em breve", modalText: "Estamos trabalhando para habilitar os pedidos online. Enquanto isso, ligue para nós!",
+                modalCall: "📞 Ligar agora", modalClose: "Fechar",
+                footerRights: "Todos os direitos reservados.", footerCreatedBy: "Criado por",
+                mon: "Segunda", tue: "Terça", wed: "Quarta", thu: "Quinta", fri: "Sexta", sat: "Sábado", sun: "Domingo"
+            }
+        };
+
+        let translations = JSON.parse(JSON.stringify(defaultTranslations));
+        let galleryImages = ["https://picsum.photos/400/300?random=1","https://picsum.photos/400/300?random=2","https://picsum.photos/400/300?random=3","https://picsum.photos/400/300?random=4"];
+
+        function applyLanguage(lang) {
+            if (!translations[lang]) lang = 'es';
+            document.documentElement.lang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) el.textContent = translations[lang][key];
+            });
+            const logoPlaceholder = document.querySelector('.logo-placeholder');
+            if (logoPlaceholder) logoPlaceholder.textContent = translations[lang].logoPlaceholder;
+            document.querySelectorAll('#langSelector button').forEach(btn => btn.classList.toggle('active', btn.dataset.lang === lang));
+            localStorage.setItem('lazzerini_lang', lang);
+        }
+
+        function detectLanguage() {
+            const saved = localStorage.getItem('lazzerini_lang');
+            if (saved && translations[saved]) return saved;
+            const browserLang = (navigator.language || 'es').toLowerCase().split('-')[0];
+            if (translations[browserLang]) return browserLang;
+            return 'es';
+        }
+
+        async function loadCustomContent() {
+            try {
+                const response = await fetch('content.json?t=' + Date.now());
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.translations) { for (const lang in data.translations) { if (translations[lang]) Object.assign(translations[lang], data.translations[lang]); } }
+                    if (data.galleryImages && data.galleryImages.length > 0) galleryImages = data.galleryImages;
+                    if (data.logo) document.getElementById('logoContainer').innerHTML = `<img src="${data.logo}" alt="Logo Lazzerini">`;
+                    if (data.footer) {
+                        const link = document.getElementById('footerCreatorLink');
+                        const holder = document.getElementById('footerCopyrightHolder');
+                        const year = document.getElementById('footerYear');
+                        if (data.footer.creatorName) link.textContent = data.footer.creatorName;
+                        if (data.footer.creatorUrl) link.href = data.footer.creatorUrl;
+                        if (data.footer.copyrightHolder) holder.textContent = data.footer.copyrightHolder;
+                        year.textContent = (data.footer.year && data.footer.year !== 'auto') ? data.footer.year : new Date().getFullYear();
+                    } else { document.getElementById('footerYear').textContent = new Date().getFullYear(); }
+                } else { document.getElementById('footerYear').textContent = new Date().getFullYear(); }
+            } catch (e) { console.log('Nessun content.json, uso default.'); document.getElementById('footerYear').textContent = new Date().getFullYear(); }
+            renderGallery();
+        }
+
+        function renderGallery() {
+            const grid = document.getElementById('galleryGrid');
+            grid.innerHTML = '';
+            galleryImages.forEach((url, index) => {
+                const div = document.createElement('div');
+                div.className = 'gallery-item';
+                div.innerHTML = `<img src="${url}" alt="Foto ${index+1}" loading="lazy">`;
+                grid.appendChild(div);
+            });
+        }
+
+        document.getElementById('orderBtn').addEventListener('click', () => document.getElementById('orderModal').classList.add('active'));
+        document.getElementById('modalClose').addEventListener('click', () => document.getElementById('orderModal').classList.remove('active'));
+        document.getElementById('orderModal').addEventListener('click', (e) => { if (e.target === document.getElementById('orderModal')) document.getElementById('orderModal').classList.remove('active'); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') document.getElementById('orderModal').classList.remove('active'); });
+        document.querySelectorAll('#langSelector button').forEach(btn => btn.addEventListener('click', () => applyLanguage(btn.dataset.lang)));
+
+        loadCustomContent().then(() => applyLanguage(detectLanguage()));
+    </script>
+</body>
+</html>

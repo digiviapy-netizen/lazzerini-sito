@@ -1,6 +1,9 @@
 backend:
-  name: git-gateway
+  name: github
   branch: main
+  repo: "digiviapy-netizen/lazzerini-sito"
+  base_url: https://decap-proxy.lazmatteo.workers.dev
+  auth_endpoint: /auth
 
 media_folder: "images"
 public_folder: "/images"

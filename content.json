@@ -1,5 +1,5 @@
 {
-  "logo": "",
+  "logo": "https://drive.google.com/file/d/1kHrVZ8JkwbezdrUqBFjgwAWygC3Nw_gb/view?usp=sharing",
   "galleryImages": [
     "https://picsum.photos/400/300?random=1",
     "https://picsum.photos/400/300?random=2",
@@ -13,9 +13,17 @@
     "copyrightHolder": "Lazzerini Pizza e Pasta"
   },
   "translations": {
-    "it": { "tagline": "Pizza e Pasta · Tradizione Italiana in Paraguay" },
-    "es": { "tagline": "Pizza y Pasta · Tradición Italiana en Paraguay" },
-    "en": { "tagline": "Pizza & Pasta · Italian Tradition in Paraguay" },
-    "pt": { "tagline": "Pizza e Massa · Tradição Italiana no Paraguai" }
+    "it": {
+      "tagline": "Pizza e Pasta · Tradizione Italiana in Paraguay"
+    },
+    "es": {
+      "tagline": "Pizza y Pasta · Tradición Italiana en Paraguay"
+    },
+    "en": {
+      "tagline": "Pizza & Pasta · Italian Tradition in Paraguay"
+    },
+    "pt": {
+      "tagline": "Pizza e Massa · Tradição Italiana no Paraguai"
+    }
   }
 }

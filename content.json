@@ -1,10 +1,10 @@
 {
   "logo": "https://drive.google.com/file/d/1kHrVZ8JkwbezdrUqBFjgwAWygC3Nw_gb/view?usp=sharing",
   "galleryImages": [
-    "https://picsum.photos/400/300?random=1",
-    "https://picsum.photos/400/300?random=2",
-    "https://picsum.photos/400/300?random=3",
-    "https://picsum.photos/400/300?random=4"
+    "/images/lazzerini-py-pasta.jpg",
+    "https://picsum.photos/400/300?random=4",
+    "/images/lazzerini-py-pasta.jpg",
+    "/images/lazzerini-forno-pizza-legna.jpg"
   ],
   "footer": {
     "creatorName": "digiviapy.com",
